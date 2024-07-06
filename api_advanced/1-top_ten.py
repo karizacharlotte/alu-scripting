@@ -1,50 +1,24 @@
-<<<<<<< HEAD
-
-=======
->>>>>>> 0e4c101fba24b99c3b9ce2c50dd7dafba36e66b4
 #!/usr/bin/python3
-"""Script that fetch 10 hot post for a given subreddit."""
+"""
+This module provides a function to
+retrieve the number of subscribers for a given subreddit
+from Reddit's API
+"""
 import requests
 
 
 def top_ten(subreddit):
-<<<<<<< HEAD
-        """Return number of subscribers if @subreddit is valid subreddit.
-            if not return 0."""
-
-                headers = {'User-Agent': 'MyAPI/0.0.1'}
-                    subreddit_url = "https://reddit.com/r/{}.json".format(subreddit)
-                        response = requests.get(subreddit_url, headers=headers)
-
-                            if response.status_code == 200:
-                                        json_data = response.json()
-                                                for i in range(10):
-                                                            print(
-                                                                            json_data.get('data')
-                                                                                            .get('children')[i]
-                                                                                                            .get('data')
-                                                                                                                            .get('title')
-                                                                                                                                        )
-                                                                                                                                            else:
-                                                                                                                                                    print(None)
-
-=======
-    """Return number of subscribers if @subreddit is valid subreddit.
-    if not return 0."""
-
-    headers = {'User-Agent': 'MyAPI/0.0.1'}
-    subreddit_url = "https://reddit.com/r/{}.json".format(subreddit)
-    response = requests.get(subreddit_url, headers=headers)
+    """
+    fetches the number of subscribers for a given subreddit
+    """
+    url = f'https://www.reddit.com/r/{subreddit}/hot.json'
+    user_agent = {'User-agent': 'Mozilla/5.0'}
+    response = requests.get(url, headers=user_agent, allow_redirects=False)
 
     if response.status_code == 200:
-        json_data = response.json()
-        for i in range(10):
-            print(
-                json_data.get('data')
-                .get('children')[i]
-                .get('data')
-                .get('title')
-            )
-    else:
-        print(None)
->>>>>>> 0e4c101fba24b99c3b9ce2c50dd7dafba36e66b4
+        data = response.json()['data']
+        if 'children' in data:
+            for post in data['children'][:10]:
+                print(post['data']['title'])
+    elif response.status_code == 404:
+        return None
